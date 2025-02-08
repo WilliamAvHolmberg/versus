@@ -1,0 +1,130 @@
+# Project Structure Rules
+
+## Directory Structure
+```
+versus-stack/
+├── versus/              # Main Next.js application
+│   ├── src/
+│   │   ├── app/        # Next.js app router pages and routes
+│   │   ├── lib/        # Shared utilities, hooks, and helpers
+│   │   └── db/         # Database related utilities
+│   ├── public/         # Static assets
+│   └── prisma/         # Database schema and migrations
+└── prd/                # Product Requirements Documentation
+```
+
+## File Location Rules
+
+1. Server Actions
+   - Location: versus/src/app/actions/
+   - Naming: {action-name}.ts
+   - Example: generate.ts, auth.ts
+
+2. Database
+   - Schema: versus/prisma/schema.prisma
+   - Client: versus/src/lib/db.ts
+   - Migrations: versus/prisma/migrations/
+
+3. Components
+   - Location: versus/src/app/_components/
+   - Shared components used across multiple pages
+
+4. Types
+   - Use Prisma-generated types whenever possible
+   - No custom types when Prisma types are available
+   - For complex joins or combinations of Prisma types:
+     - Create and export the type model IN the server action
+     - Example:
+       ```typescript
+       // actions/get-user-with-posts.ts
+       "use server"
+       import { User, Post } from "@prisma/client"
+       
+       export interface UserWithPosts extends User {
+         posts: Post[]
+       }
+       
+       export async function getUserWithPosts() {
+         // ... implementation
+       }
+       ```
+     - Import and use these types where needed
+   - Keep any necessary custom types close to their implementation
+   - No global types directory
+
+5. Documentation
+   - All PRD files go in prd/ directory
+   - Technical documentation in respective component directories
+
+## Coding Conventions
+
+1. File Names
+   - Use kebab-case for page files
+   - Use PascalCase for component files
+   - Use camelCase for utility files
+
+2. Imports
+   - Use absolute imports from src with @/ prefix
+   - Example: import { db } from "@/lib/db"
+
+3. Components
+   - One component per file
+   - Use TypeScript for all components
+   - Include component props interface in same file
+
+4. Server Actions
+   - Use TypeScript
+   - Include input validation
+   - Handle errors gracefully
+   - Return strongly typed responses
+   + Must include "use server" directive at the top of the file
+   + Server-only APIs (like next/headers) require "use server"
+   + Next.js 15+ and React 19+ specific:
+     - Server Actions must be explicitly marked
+     - Cannot mix client and server code in the same file
+     - Common server-only APIs:
+       - next/headers
+       - cookies()
+       - headers()
+       - redirect()
+
+5. Cookie Handling
+   - Split cookie logic between server and client components
+   - Server Components:
+     - Use async cookies() from next/headers
+     - Must be async components
+     - Example pattern:
+       ```typescript
+       // page.tsx (Server Component)
+       export default async function Page() {
+         return <CookieProvider />;
+       }
+
+       // CookieProvider.tsx (Server Component)
+       export async function CookieProvider() {
+         const cookieStore = await cookies();
+         const userId = cookieStore.get("userId")?.value;
+         return <ClientComponent initialUserId={userId} />;
+       }
+       ```
+     - Pass initial cookie values as props to client components
+     - Location: Root layout or page-level providers
+   - Client Components:
+     - Use cookies-next for setting/getting cookies
+     - Handle cookie persistence and updates
+     - Example pattern:
+       ```typescript
+       // ClientComponent.tsx
+       "use client"
+       useEffect(() => {
+         if (!initialUserId) {
+           setCookie("userId", newId, { maxAge: 60 * 60 * 24 * 365 });
+         }
+       }, [initialUserId]);
+       ```
+     - Avoid direct cookie manipulation in shared components
+   - Cookie Provider Pattern:
+     - Server component wrapper for initial cookie reading
+     - Client component for cookie management
+     - Ensures SSR compatibility
+     - Handles async cookie reading properly

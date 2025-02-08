@@ -1,0 +1,57 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Generation {
+  id          String        @id @default(uuid())
+  prompt      String
+  createdAt   DateTime      @default(now())
+  userId      String        // For anonymous tracking
+  isPublic    Boolean       @default(false)
+  results     ModelResult[]
+}
+
+model ModelResult {
+  id            String     @id @default(uuid())
+  generationId  String
+  generation    Generation @relation(fields: [generationId], references: [id])
+  modelId       String     // The OpenRouter model ID
+  generatedHtml String     @db.Text
+  executionTime Int        // in milliseconds
+  cost         Float      // Track cost per generation
+  error        String?    // Store any error messages
+  createdAt    DateTime   @default(now())
+  prompt       String
+
+  @@index([generationId])
+}
+
+enum FeedbackType {
+  BUG
+  FEATURE_REQUEST
+  GENERAL
+  OTHER
+}
+
+model Feedback {
+  id          String       @id @default(cuid())
+  type        FeedbackType
+  title       String
+  description String
+  status      Boolean      @default(false)
+  userId      String?
+  email       String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([userId])
+  @@index([status])
+} 
