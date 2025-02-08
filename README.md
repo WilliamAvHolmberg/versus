@@ -1,5 +1,3 @@
-```
-
 # ⚠️ THIS PROJECT WAS RAWDOGGED WITH CURSOR, NO BEST PRACTICES ETC ⚠️
 
 Compare HTML generation across multiple AI models simultaneously. Input a prompt, get multiple AI interpretations.
