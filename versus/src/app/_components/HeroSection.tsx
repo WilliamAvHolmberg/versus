@@ -40,9 +40,9 @@ export function HeroSection() {
           </a>
         </p>
         <p className="text-sm text-muted-foreground italic mb-2 mt-2">
-          Made with AI in 1 hour - Bugs probably included, see them as bonus features! 🤖🐛✨
+          Made with AI in a few hours - Bugs probably included, see them as bonus features! 🤖🐛✨
         </p>
-        <p className="text-sm text-muted-foreground italic mb-2">
+        {/* <p className="text-sm text-muted-foreground italic mb-2">
           Warning: Claude is burning through my wallet faster than a shopaholic at a sale! 💸
         </p>
         <p className="text-sm text-muted-foreground italic mb-2">
@@ -51,7 +51,7 @@ export function HeroSection() {
         </p>
         <p className="text-sm text-muted-foreground italic mb-2">
           No worries though! Hit that feedback button and I&apos;ll recharge the AI juice! 🔋✨
-        </p>
+        </p> */}
       </div>
     </section>
   );

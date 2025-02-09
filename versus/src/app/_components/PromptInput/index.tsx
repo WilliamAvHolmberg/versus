@@ -98,11 +98,11 @@ export function PromptInput({
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             placeholder=""
-            className="min-h-[120px] resize-none bg-transparent border-0 focus-visible:ring-0 focus:outline-none p-0 placeholder:text-muted-foreground/60 text-lg rounded-xl"
+            className="min-h-[45px] resize-none bg-transparent border-0 focus-visible:ring-0 focus:outline-none p-0 placeholder:text-muted-foreground/60 text-lg rounded-xl"
           />
         </div>
-        <div className="flex justify-between items-center">
-          <div className="flex gap-2 flex-wrap">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div className="flex gap-2 flex-wrap w-full sm:w-auto">
             {suggestions.map((suggestion) => (
               <button
                 key={suggestion.title}
@@ -124,6 +124,7 @@ export function PromptInput({
             size="lg"
             disabled={isButtonDisabled}
             className={`
+              w-full sm:w-auto
               relative group overflow-hidden
               ${isButtonDisabled ? 'opacity-50' : 'hover:opacity-90'}
               bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500

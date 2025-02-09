@@ -73,7 +73,7 @@ export function GenerationStatus({ prompt, selectedModels, results, isGenerating
             </div>
             <div className="flex items-center gap-2">
               <ChevronRight className="h-3 w-3 shrink-0 transition-transform duration-200 group-data-[state=open]:rotate-90" />
-              <span className="text-sm truncate font-normal opacity-70 group-hover:opacity-100 transition-opacity duration-200 pr-4">
+              <span className="text-sm truncate font-normal opacity-70 group-hover:opacity-100 transition-opacity duration-200 pr-4 whitespace-normal break-words">
                 {prompt}
               </span>
             </div>
