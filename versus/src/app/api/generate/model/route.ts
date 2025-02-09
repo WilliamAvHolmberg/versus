@@ -1,12 +1,12 @@
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
-import { generateText, streamText } from "ai";
+import { generateText } from "ai";
 import { prisma } from "@/lib/db";
 import { NextRequest } from "next/server";
 import { OpenRouterModel } from "@/app/actions/get-models";
 
 export const maxDuration = 60;
 
-export const models = [
+const models = [
     {
         "id": "anthropic/claude-3.5-sonnet",
         "name": "Anthropic: Claude 3.5 Sonnet",
